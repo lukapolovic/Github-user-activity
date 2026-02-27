@@ -5,7 +5,7 @@ class Main {
 		if (args.length > 0) {
 			String username = args[0];
 			StringCleaner strCleaner = new StringCleaner();
-			if (strCleaner.containsIllegalChar(username)) {
+			if (!strCleaner.isValidString(username)) {
 				System.out.println("Username contains illegal characters!");
 				throw new IllegalArgumentException(username);
 			}
@@ -18,11 +18,11 @@ class Main {
 }
 
 class StringCleaner {
-	public String illegalChars = "[~#@*+%{}<>\\[\\]|\"\\_^]";
+	public String regex = "^[-a-zA-Z0-9]*$";
 
-	public boolean containsIllegalChar(String toExamine) {
-		Pattern pattern = Pattern.compile(illegalChars);
+	public boolean isValidString(String toExamine) {
+		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(toExamine);
-		return matcher.find();
+		return matcher.matches();
 	}
 }
