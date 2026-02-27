@@ -1,3 +1,4 @@
+import java.net.http.HttpResponse;
 import java.util.regex.*;
 
 class Main {
@@ -10,7 +11,9 @@ class Main {
 				throw new IllegalArgumentException(username);
 			}
 			String url = "https://api.github.com/users/" + args[0] + "/events/public";
-			System.out.println(url);
+			HttpResponse<String> response = new HttpHandler().getResponse(url);
+			System.out.println("Status code: " + response.statusCode());
+			System.out.println("Response body: " + response.body());
 		} else {
 			System.out.println("No user provided");
 		}
