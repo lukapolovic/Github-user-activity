@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 class UserEvent {
 	private long id;
-	private String type;
+	private EventType type;
 	private String repo;
 
 	public UserEvent(long id, String type, String repo) {
@@ -15,7 +15,7 @@ class UserEvent {
 		return this.id;
 	}
 
-	public String getType() {
+	public EventType getType() {
 		return this.type;
 	}
 
@@ -32,13 +32,10 @@ class UserEvent {
 	}
 
 	public void setType(String type) {
-		String[] acceptedEvents = { "WatchEvent", "CreateEvent", "PushEvent" };
-		boolean acceptableType = Arrays.stream(acceptedEvents).anyMatch(type::equals);
-
-		if (acceptableType) {
-			this.type = type;
-		} else {
-			throw new IllegalArgumentException("This type is not supported!");
+		try {
+			this.type = EventType.valueOf(type);
+		} catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException("This type is not supported: " + type);
 		}
 	}
 
@@ -50,5 +47,24 @@ class UserEvent {
 		} else {
 			this.repo = repo.substring(idxOfSlash + 1);
 		}
+	}
+
+	public enum EventType {
+		CommmitCommentEvent,
+		CreateEvent,
+		DeleteEvent,
+		DiscussionEvent,
+		ForkEvent,
+		GollumEvent,
+		IssueCommentEvent,
+		IssuesEvent,
+		MemberEvent,
+		PublicEvent,
+		PullRequestEvent,
+		PullRequestReviewEvent,
+		PullRequestReviewCommentEvent,
+		PushEvent,
+		ReleaseEvent,
+		WatchEvent
 	}
 }
