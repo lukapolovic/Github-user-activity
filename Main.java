@@ -22,6 +22,16 @@ class Main {
 		List<String> extValues = strCleaner.extractInfo(cleanedResponse);
 		List<String> cleanedValues = strCleaner.cleanFieldValues(extValues);
 
+		List<UserEvent> userEvents = Main.returnUserEvents(cleanedValues);
+
+		for (UserEvent event : userEvents) {
+			System.out.println("Id: " + event.getId() + "\nType: " + event.getType()
+					+ "\nRepo: " + event.getRepo());
+		}
+
+	}
+
+	public static List<UserEvent> returnUserEvents(List<String> array) {
 		List<UserEvent> userEvents = new ArrayList<>();
 
 		for (int i = 0; i < cleanedValues.size(); i += 3) {
@@ -33,11 +43,7 @@ class Main {
 			userEvents.add(usrEvent);
 		}
 
-		for (UserEvent event : userEvents) {
-			System.out.println("Id: " + event.getId() + "\nType: " + event.getType()
-					+ "\nRepo: " + event.getRepo());
-		}
-
+		return userEvents;
 	}
 }
 
