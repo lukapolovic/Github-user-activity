@@ -48,23 +48,4 @@ class UserEvent {
 			this.repo = repo.substring(idxOfSlash + 1);
 		}
 	}
-
-	public enum EventType {
-		CommmitCommentEvent,
-		CreateEvent,
-		DeleteEvent,
-		DiscussionEvent,
-		ForkEvent,
-		GollumEvent,
-		IssueCommentEvent,
-		IssuesEvent,
-		MemberEvent,
-		PublicEvent,
-		PullRequestEvent,
-		PullRequestReviewEvent,
-		PullRequestReviewCommentEvent,
-		PushEvent,
-		ReleaseEvent,
-		WatchEvent
-	}
 }

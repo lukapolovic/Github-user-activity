@@ -23,6 +23,23 @@ class Main {
 		List<String> cleanedValues = strCleaner.cleanFieldValues(extValues);
 
 		List<UserEvent> userEvents = Main.returnUserEvents(cleanedValues);
+
+		Set<String> distinctRepos = Main.getDistinctRepos(userEvents);
+
+		Map<String, RepoActivity> repoActivities = new HashMap<>();
+		for (String repo : distinctRepos) {
+			repoActivities.put(repo, new RepoActivity(repo));
+		}
+
+		for (UserEvent event : userEvents) {
+			String repoName = event.getRepo();
+			RepoActivity repoActivity = repoActivities.get(repoName);
+			repoActivity.addEvent(event.getType());
+		}
+
+		repoActivities.values().forEach(repo -> repo.getEventsByEventType());
+
+		repoActivities.values().forEach(repo -> System.out.println(repo.toString()));
 	}
 
 	public static List<UserEvent> returnUserEvents(List<String> array) {
@@ -39,6 +56,16 @@ class Main {
 		}
 
 		return userEvents;
+	}
+
+	public static Set<String> getDistinctRepos(List<UserEvent> array) {
+		Set<String> repos = new HashSet<>();
+
+		for (UserEvent event : array) {
+			repos.add(event.getRepo());
+		}
+
+		return repos;
 	}
 }
 
