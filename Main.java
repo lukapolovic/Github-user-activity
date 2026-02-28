@@ -18,8 +18,20 @@ class Main {
 			List<String> extValues = strCleaner.extractInfo(cleanedResponse);
 			List<String> cleanedValues = strCleaner.cleanFieldValues(extValues);
 
-			for (String str : cleanedValues) {
-				System.out.println(str);
+			List<UserEvent> userEvents = new ArrayList<>();
+
+			for (int i = 0; i < cleanedValues.size(); i += 3) {
+				long id = Long.parseLong(strCleaner.getFieldValue(cleanedValues.get(i)));
+				String type = strCleaner.getFieldValue(cleanedValues.get(i + 1));
+				String repo = strCleaner.getFieldValue(cleanedValues.get(i + 2));
+
+				UserEvent usrEvent = new UserEvent(id, type, repo);
+				userEvents.add(usrEvent);
+			}
+
+			for (UserEvent event : userEvents) {
+				System.out.println("Id: " + event.getId() + "\nType: " + event.getType()
+						+ "\nRepo: " + event.getRepo());
 			}
 		} else {
 			System.out.println("No user provided");
@@ -68,5 +80,9 @@ class StringCleaner {
 		}
 
 		return cleanedList;
+	}
+
+	public String getFieldValue(String str) {
+		return str.split(":")[1];
 	}
 }

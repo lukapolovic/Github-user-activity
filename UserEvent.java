@@ -1,17 +1,17 @@
 import java.util.Arrays;
 
 class UserEvent {
-	private int id;
+	private long id;
 	private String type;
 	private String repo;
 
-	public UserEvent(int id, String type, String repo) {
-		this.id = id;
-		this.type = type;
-		this.repo = repo;
+	public UserEvent(long id, String type, String repo) {
+		setId(id);
+		setType(type);
+		setRepo(repo);
 	}
 
-	public int getId() {
+	public long getId() {
 		return this.id;
 	}
 
@@ -23,7 +23,7 @@ class UserEvent {
 		return this.repo;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		if (id > 0) {
 			this.id = id;
 		} else {
@@ -42,13 +42,13 @@ class UserEvent {
 		}
 	}
 
-	public void repo(String repo) {
+	public void setRepo(String repo) {
 		int idxOfSlash = repo.indexOf("/");
 
 		if (idxOfSlash == -1) {
 			throw new IllegalArgumentException("Cannot find '/' in repo String!");
 		} else {
-			this.repo = repo.substring(idxOfSlash);
+			this.repo = repo.substring(idxOfSlash + 1);
 		}
 	}
 }
