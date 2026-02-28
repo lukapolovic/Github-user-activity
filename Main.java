@@ -4,38 +4,40 @@ import java.util.regex.*;
 
 class Main {
 	public static void main(String[] args) {
-		if (args.length > 0) {
-			String username = args[0];
-			StringCleaner strCleaner = new StringCleaner();
-			if (!strCleaner.isValidString(username)) {
-				System.out.println("Username contains illegal characters!");
-				throw new IllegalArgumentException(username);
-			}
-			String url = "https://api.github.com/users/" + args[0] + "/events/public";
-			String response = new HttpHandler().getResponse(url);
-			String cleanedResponse = response.substring(1, response.length() - 1);
-
-			List<String> extValues = strCleaner.extractInfo(cleanedResponse);
-			List<String> cleanedValues = strCleaner.cleanFieldValues(extValues);
-
-			List<UserEvent> userEvents = new ArrayList<>();
-
-			for (int i = 0; i < cleanedValues.size(); i += 3) {
-				long id = Long.parseLong(strCleaner.getFieldValue(cleanedValues.get(i)));
-				String type = strCleaner.getFieldValue(cleanedValues.get(i + 1));
-				String repo = strCleaner.getFieldValue(cleanedValues.get(i + 2));
-
-				UserEvent usrEvent = new UserEvent(id, type, repo);
-				userEvents.add(usrEvent);
-			}
-
-			for (UserEvent event : userEvents) {
-				System.out.println("Id: " + event.getId() + "\nType: " + event.getType()
-						+ "\nRepo: " + event.getRepo());
-			}
-		} else {
+		if (args.length <= 0) {
 			System.out.println("No user provided");
 		}
+
+		String username = args[0];
+		StringCleaner strCleaner = new StringCleaner();
+		if (!strCleaner.isValidString(username)) {
+			System.out.println("Username contains illegal characters!");
+			throw new IllegalArgumentException(username);
+		}
+
+		String url = "https://api.github.com/users/" + args[0] + "/events/public";
+		String response = new HttpHandler().getResponse(url);
+		String cleanedResponse = response.substring(1, response.length() - 1);
+
+		List<String> extValues = strCleaner.extractInfo(cleanedResponse);
+		List<String> cleanedValues = strCleaner.cleanFieldValues(extValues);
+
+		List<UserEvent> userEvents = new ArrayList<>();
+
+		for (int i = 0; i < cleanedValues.size(); i += 3) {
+			long id = Long.parseLong(strCleaner.getFieldValue(cleanedValues.get(i)));
+			String type = strCleaner.getFieldValue(cleanedValues.get(i + 1));
+			String repo = strCleaner.getFieldValue(cleanedValues.get(i + 2));
+
+			UserEvent usrEvent = new UserEvent(id, type, repo);
+			userEvents.add(usrEvent);
+		}
+
+		for (UserEvent event : userEvents) {
+			System.out.println("Id: " + event.getId() + "\nType: " + event.getType()
+					+ "\nRepo: " + event.getRepo());
+		}
+
 	}
 }
 
