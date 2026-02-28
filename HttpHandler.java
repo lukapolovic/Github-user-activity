@@ -3,6 +3,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.zip.DataFormatException;
 
 class HttpHandler {
 	public String getResponse(String url) {
@@ -17,6 +19,11 @@ class HttpHandler {
 					HttpResponse.BodyHandlers.ofString());
 			String response = future.thenApply(HttpResponse::body)
 					.join();
+
+			if (response.equals("[]")) {
+				throw new RejectedExecutionException("This user has no recent activity, exiting...");
+			}
+
 			return response;
 		} catch (Exception e) {
 			e.printStackTrace();
