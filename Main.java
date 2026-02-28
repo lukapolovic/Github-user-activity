@@ -23,21 +23,16 @@ class Main {
 		List<String> cleanedValues = strCleaner.cleanFieldValues(extValues);
 
 		List<UserEvent> userEvents = Main.returnUserEvents(cleanedValues);
-
-		for (UserEvent event : userEvents) {
-			System.out.println("Id: " + event.getId() + "\nType: " + event.getType()
-					+ "\nRepo: " + event.getRepo());
-		}
-
 	}
 
 	public static List<UserEvent> returnUserEvents(List<String> array) {
+		StringCleaner strCleaner = new StringCleaner();
 		List<UserEvent> userEvents = new ArrayList<>();
 
-		for (int i = 0; i < cleanedValues.size(); i += 3) {
-			long id = Long.parseLong(strCleaner.getFieldValue(cleanedValues.get(i)));
-			String type = strCleaner.getFieldValue(cleanedValues.get(i + 1));
-			String repo = strCleaner.getFieldValue(cleanedValues.get(i + 2));
+		for (int i = 0; i < array.size(); i += 3) {
+			long id = Long.parseLong(strCleaner.getFieldValue(array.get(i)));
+			String type = strCleaner.getFieldValue(array.get(i + 1));
+			String repo = strCleaner.getFieldValue(array.get(i + 2));
 
 			UserEvent usrEvent = new UserEvent(id, type, repo);
 			userEvents.add(usrEvent);
