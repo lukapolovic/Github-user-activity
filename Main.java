@@ -11,9 +11,8 @@ class Main {
 				throw new IllegalArgumentException(username);
 			}
 			String url = "https://api.github.com/users/" + args[0] + "/events/public";
-			HttpResponse<String> response = new HttpHandler().getResponse(url);
-			System.out.println("Status code: " + response.statusCode());
-			System.out.println("Response body: " + response.body());
+			String response = new HttpHandler().getResponse(url);
+			System.out.println(response);
 		} else {
 			System.out.println("No user provided");
 		}
