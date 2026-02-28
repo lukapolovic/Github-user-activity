@@ -1,4 +1,5 @@
 import java.net.http.HttpResponse;
+import java.util.*;
 import java.util.regex.*;
 
 class Main {
@@ -12,7 +13,14 @@ class Main {
 			}
 			String url = "https://api.github.com/users/" + args[0] + "/events/public";
 			String response = new HttpHandler().getResponse(url);
-			System.out.println(response);
+			String cleanedResponse = response.substring(1, response.length() - 1);
+
+			List<String> extValues = strCleaner.extractInfo(cleanedResponse);
+			List<String> cleanedValues = strCleaner.cleanFieldValues(extValues);
+
+			for (String str : cleanedValues) {
+				System.out.println(str);
+			}
 		} else {
 			System.out.println("No user provided");
 		}
@@ -26,5 +34,39 @@ class StringCleaner {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(toExamine);
 		return matcher.matches();
+	}
+
+	public List<String> extractInfo(String body) {
+		String[] splitBody = body.split("},");
+		List<String> extractedField = new ArrayList<>();
+
+		for (String str : splitBody) {
+			String firstKeyField = str.substring(0, 6);
+			String idKeyField = "{\"id\":";
+			String repoKeyField = "\"repo\"";
+			String[] splitField = str.split(",");
+
+			if (firstKeyField.equals(idKeyField)) {
+				extractedField.add(splitField[0]);
+				extractedField.add(splitField[1]);
+			} else if (firstKeyField.equals(repoKeyField)) {
+				extractedField.add(splitField[1]);
+			} else {
+				continue;
+			}
+		}
+
+		return extractedField;
+	}
+
+	public List<String> cleanFieldValues(List<String> array) {
+		List<String> cleanedList = new ArrayList<>();
+
+		for (String str : array) {
+			String cleanedStr = str.replaceAll("[{\"}]", "");
+			cleanedList.add(cleanedStr);
+		}
+
+		return cleanedList;
 	}
 }
