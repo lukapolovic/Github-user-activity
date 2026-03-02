@@ -18,14 +18,22 @@ class Main {
 		String url = "https://api.github.com/users/" + args[0] + "/events/public";
 		String response = new HttpHandler().getResponse(url);
 
-		List<String> extValues = strCleaner.extractInfo(response);
-		List<String> cleanedValues = strCleaner.cleanFieldValues(extValues);
+		List<String> cleanedValues = strCleaner.cleanFieldValues(strCleaner.extractInfo(response));
 
 		List<UserEvent> userEvents = Main.returnUserEvents(cleanedValues);
-
 		Set<String> distinctRepos = Main.getDistinctRepos(userEvents);
 
+		Map<String, RepoActivity> repoActivities = Main.buildRepoActivities(distinctRepos, userEvents);
+
+		repoActivities.values().forEach(repo -> repo.getEventsByEventType());
+
+		repoActivities.values().forEach(repo -> System.out.println(repo.toString()));
+	}
+
+	public static Map<String, RepoActivity> buildRepoActivities(Set<String> distinctRepos,
+			List<UserEvent> userEvents) {
 		Map<String, RepoActivity> repoActivities = new HashMap<>();
+
 		for (String repo : distinctRepos) {
 			repoActivities.put(repo, new RepoActivity(repo));
 		}
@@ -36,9 +44,7 @@ class Main {
 			repoActivity.addEvent(event.getType());
 		}
 
-		repoActivities.values().forEach(repo -> repo.getEventsByEventType());
-
-		repoActivities.values().forEach(repo -> System.out.println(repo.toString()));
+		return repoActivities;
 	}
 
 	public static List<UserEvent> returnUserEvents(List<String> array) {
