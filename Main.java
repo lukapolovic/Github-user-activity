@@ -17,9 +17,8 @@ class Main {
 
 		String url = "https://api.github.com/users/" + args[0] + "/events/public";
 		String response = new HttpHandler().getResponse(url);
-		String cleanedResponse = response.substring(1, response.length() - 1);
 
-		List<String> extValues = strCleaner.extractInfo(cleanedResponse);
+		List<String> extValues = strCleaner.extractInfo(response);
 		List<String> cleanedValues = strCleaner.cleanFieldValues(extValues);
 
 		List<UserEvent> userEvents = Main.returnUserEvents(cleanedValues);

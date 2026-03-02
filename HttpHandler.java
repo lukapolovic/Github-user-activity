@@ -24,7 +24,7 @@ class HttpHandler {
 				throw new RejectedExecutionException("This user has no recent activity, exiting...");
 			}
 
-			return response;
+			return response.substring(1, response.length() - 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException();
